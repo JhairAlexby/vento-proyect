@@ -10,6 +10,10 @@ export default function LandingPage() {
     navigate("/register");
   };
 
+  const handleLoginClick = () => {
+    navigate("/login"); 
+  }
+
   return (
     <main className="min-h-screen bg-white text-gray-900">
       <header className="w-full bg-white border-b border-gray-200 py-4">
@@ -18,7 +22,7 @@ export default function LandingPage() {
             Ventoo
           </div>
           <div className="flex gap-4">
-            <Button variant="outline" className="hover:bg-gray-100">
+            <Button onClick={handleLoginClick} variant="outline" className="hover:bg-gray-100">
               Iniciar Sesión
             </Button>
             <Button onClick={handleRegisterClick}>
