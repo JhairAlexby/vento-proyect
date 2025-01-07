@@ -1,8 +1,15 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { useNavigate } from "react-router-dom"
 
 export default function LandingPage() {
+  const navigate = useNavigate();
+
+  const handleRegisterClick = () => {
+    navigate("/register");
+  };
+
   return (
     <main className="min-h-screen bg-white text-gray-900">
       <header className="w-full bg-white border-b border-gray-200 py-4">
@@ -14,7 +21,7 @@ export default function LandingPage() {
             <Button variant="outline" className="hover:bg-gray-100">
               Iniciar Sesión
             </Button>
-            <Button>
+            <Button onClick={handleRegisterClick}>
               Registrarse
             </Button>
           </div>
