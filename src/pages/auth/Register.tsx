@@ -1,15 +1,5 @@
+import { FormRegister } from "@/components/register/FormRegister"
 import React from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card"
 
 export default function Register() {
   const handleRegister = (event: React.FormEvent) => {
@@ -28,67 +18,7 @@ export default function Register() {
       </div>
 
       <div className="flex flex-1 items-center justify-center p-6 overflow-auto">
-        <Card className="w-full max-w-md shadow-md">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl">Crear Cuenta</CardTitle>
-            <CardDescription className="text-gray-500">
-              Regístrate para empezar a gestionar tu negocio con Ventoo
-            </CardDescription>
-          </CardHeader>
-
-          <form onSubmit={handleRegister}>
-            <CardContent className="grid gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="nombre">Nombre</Label>
-                <Input
-                  id="nombre"
-                  type="text"
-                  placeholder="Tu nombre"
-                  required
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="email">Correo electrónico</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="tu-correo@ejemplo.com"
-                  required
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="password">Contraseña</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="********"
-                  required
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="confirmPassword">Confirmar Contraseña</Label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  placeholder="********"
-                  required
-                />
-              </div>
-            </CardContent>
-
-            <CardFooter className="flex flex-col gap-3">
-              <Button type="submit" className="w-full">
-                Registrarse
-              </Button>
-              <div className="text-center text-sm text-gray-600">
-                <span>¿Ya tienes cuenta? </span>
-                <a href="#" className="hover:underline">
-                  Inicia sesión
-                </a>
-              </div>
-            </CardFooter>
-          </form>
-        </Card>
+        <FormRegister onSubmit={handleRegister} />
       </div>
     </main>
   )
