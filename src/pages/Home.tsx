@@ -7,7 +7,5 @@ export const Home = () => {
         <AppSidebar />
         <SidebarTrigger />
         </SidebarProvider>
-    
-
   )
 }
