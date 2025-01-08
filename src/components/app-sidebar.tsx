@@ -18,6 +18,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { useNavigate } from "react-router-dom"
 
 const navigationItems = [
   {
@@ -58,8 +59,10 @@ const navigationItems = [
 ]
 
 export function AppSidebar() {
+    const navigate = useNavigate()
+
   const handleLogout = () => {
-    console.log("Logging out...")
+    navigate("/landingPage")
   }
 
   return (
