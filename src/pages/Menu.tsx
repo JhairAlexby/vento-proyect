@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import { ProductGrid } from "@/components/menu/ProductGrid"
-
+import { SidebarTrigger } from "@/components/ui/sidebar"
 
 interface Product {
   id: number
@@ -40,6 +40,8 @@ export const Menu = () => {
 
   return (
     <div className="p-6">
+            <SidebarTrigger />
+
       <h1 className="text-2xl font-bold mb-4">Menú</h1>
       
       <ProductGrid 
