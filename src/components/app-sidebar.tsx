@@ -27,12 +27,12 @@ const navigationItems = [
       {
         title: "Dashboard",
         icon: Home,
-        url: "/#"
+        url: "/home"
       },
       {
         title: "Menu",
         icon: Package,
-        url: "/#"
+        url: "/menu"
       },
       {
         title: "Agregar Ventas",
