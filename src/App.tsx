@@ -5,6 +5,8 @@ import Register from './pages/auth/Register'
 import Login from './pages/auth/Login'
 import { Home } from './pages/Home'
 import { Menu } from './pages/Menu'
+import { AddSale } from './pages/AddSale'
+
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
         <Route element={<DashboardLayout />}>
           <Route path="/home" element={<Home />} />
           <Route path="/menu" element={<Menu />} />
+          <Route path="/add-sale" element={<AddSale />} />
         </Route>
 
         {/* Ruta por defecto */}

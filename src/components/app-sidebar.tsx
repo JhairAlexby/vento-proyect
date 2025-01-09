@@ -37,7 +37,7 @@ const navigationItems = [
       {
         title: "Agregar Ventas",
         icon: ShoppingBag,
-        url: "/#"
+        url: "/add-sale"
       },
     ]
   },
