@@ -28,6 +28,28 @@ const initialMenu: MenuItem[] = [
     category: 'hotdogs',
     description: 'Salchicha, mostaza, ketchup'
   },
+  {
+    id: '4',
+    name: 'Hot Dog con Queso',
+    price: 7.99,
+    category: 'hotdogs',
+    description: 'Salchicha, queso, mostaza, ketchup'
+  },
+  {
+    id: '5',
+    name: 'Hamburguesa de Pollo',
+    price: 9.99,
+    category: 'hamburguesas',
+    description: 'Pechuga de pollo, lechuga, tomate, queso'
+  },
+  {
+    id: '6',
+    name: 'Hot Dog con Tocino',
+    price: 8.99,
+    category: 'hotdogs',
+    description: 'Salchicha, tocino, queso, mostaza, ketchup'
+    
+  }
 ];
 
 const MenuPage = () => {
