@@ -1,16 +1,10 @@
 import React from 'react';
-import { Button } from "../../components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../../components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Edit, Trash2 } from "lucide-react";
-import { cn } from "../../lib/utils";
-
-interface MenuItem {
-  id: string;
-  name: string;
-  price: number;
-  category: 'hamburguesas' | 'hotdogs';
-  description: string;
-}
+import { cn } from "@/lib/utils";
+import ProductDialog from '../../components/dashboard/ProductDialog';
+import { MenuItem, MenuItemInput } from '@/types/menu';
 
 const initialMenu: MenuItem[] = [
   {
@@ -34,16 +28,35 @@ const initialMenu: MenuItem[] = [
     category: 'hotdogs',
     description: 'Salchicha, mostaza, ketchup'
   },
-  // Puedes agregar más items aquí
 ];
 
 const MenuPage = () => {
   const [selectedCategory, setSelectedCategory] = React.useState<'todos' | 'hamburguesas' | 'hotdogs'>('todos');
   const [menu, setMenu] = React.useState<MenuItem[]>(initialMenu);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [editingProduct, setEditingProduct] = React.useState<MenuItem | undefined>();
 
   const filteredMenu = menu.filter(item => 
     selectedCategory === 'todos' ? true : item.category === selectedCategory
   );
+
+  const handleSaveProduct = (data: MenuItemInput) => {
+    if (editingProduct) {
+      // Actualizar producto existente
+      setMenu(menu.map(item => 
+        item.id === editingProduct.id ? { ...data, id: editingProduct.id } : item
+      ));
+    } else {
+      // Agregar nuevo producto
+      setMenu([...menu, { ...data, id: Date.now().toString() }]);
+    }
+  };
+
+  const handleDelete = (id: string) => {
+    if (window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+      setMenu(menu.filter(item => item.id !== id));
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -53,7 +66,13 @@ const MenuPage = () => {
           <h1 className="text-2xl font-bold text-gray-800">Menú</h1>
           <p className="text-gray-600">Gestiona tus productos</p>
         </div>
-        <Button className="bg-gradient-to-r from-vento-primary to-vento-secondary text-white">
+        <Button 
+          className="bg-gradient-to-r from-vento-primary to-vento-secondary text-white"
+          onClick={() => {
+            setEditingProduct(undefined);
+            setDialogOpen(true);
+          }}
+        >
           <Plus className="h-5 w-5 mr-2" />
           Agregar Producto
         </Button>
@@ -96,11 +115,23 @@ const MenuPage = () => {
               </div>
             </CardContent>
             <CardFooter className="flex justify-end gap-2">
-              <Button variant="outline" size="sm">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  setEditingProduct(item);
+                  setDialogOpen(true);
+                }}
+              >
                 <Edit className="h-4 w-4 mr-2" />
                 Editar
               </Button>
-              <Button variant="outline" size="sm" className="text-red-600 hover:bg-red-50">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="text-red-600 hover:bg-red-50"
+                onClick={() => handleDelete(item.id)}
+              >
                 <Trash2 className="h-4 w-4 mr-2" />
                 Eliminar
               </Button>
@@ -108,6 +139,17 @@ const MenuPage = () => {
           </Card>
         ))}
       </div>
+
+      {/* Dialog para crear/editar productos */}
+      <ProductDialog
+        open={dialogOpen}
+        onOpenChange={(open) => {
+          setDialogOpen(open);
+          if (!open) setEditingProduct(undefined);
+        }}
+        initialData={editingProduct}
+        onSave={handleSaveProduct}
+      />
     </div>
   );
 };

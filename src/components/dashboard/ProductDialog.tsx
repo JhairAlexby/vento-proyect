@@ -5,7 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "../../components/ui/dialog";
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,31 +15,37 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../components/ui/select";
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { MenuItem, MenuItemInput } from '@/types/menu';
 
 interface ProductDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  initialData?: {
-    id?: string;
-    name: string;
-    price: number;
-    category: 'hamburguesas' | 'hotdogs';
-    description: string;
-  };
-  onSave: (data: any) => void;
+  initialData?: MenuItem;
+  onSave: (data: MenuItemInput) => void;
 }
 
 const ProductDialog = ({ open, onOpenChange, initialData, onSave }: ProductDialogProps) => {
-  const [formData, setFormData] = React.useState(
-    initialData || {
-      name: '',
-      price: 0,
-      category: 'hamburguesas',
-      description: ''
+  const [formData, setFormData] = React.useState<MenuItemInput>({
+    name: '',
+    price: 0,
+    category: 'hamburguesas',
+    description: ''
+  });
+
+  React.useEffect(() => {
+    if (initialData) {
+      setFormData(initialData);
+    } else {
+      setFormData({
+        name: '',
+        price: 0,
+        category: 'hamburguesas',
+        description: ''
+      });
     }
-  );
+  }, [initialData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,6 +78,7 @@ const ProductDialog = ({ open, onOpenChange, initialData, onSave }: ProductDialo
                 id="price"
                 type="number"
                 step="0.01"
+                min="0"
                 value={formData.price}
                 onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
                 required
