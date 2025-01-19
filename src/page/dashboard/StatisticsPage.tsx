@@ -4,13 +4,13 @@ import { BarChart3, TrendingUp, DollarSign, Users } from 'lucide-react';
 
 const StatisticsPage = () => {
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
         <p className="text-gray-600">Bienvenido de nuevo</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           {
             title: 'Ventas Totales',
@@ -55,8 +55,6 @@ const StatisticsPage = () => {
           </Card>
         ))}
       </div>
-
-      {/* Aquí puedes agregar más secciones como gráficos, tablas, etc. */}
     </div>
   );
 };

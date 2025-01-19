@@ -13,8 +13,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const Sidebar = () => {
-  const [collapsed, setCollapsed] = React.useState(false);
+interface SidebarProps {
+  collapsed: boolean;
+  setCollapsed: (collapsed: boolean) => void;
+  isMobile: boolean;
+  onNavigate?: () => void;
+}
+
+const Sidebar = ({ collapsed, setCollapsed, isMobile, onNavigate }: SidebarProps) => {
   const location = useLocation();
 
   const menuItems = [
@@ -46,26 +52,30 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className={cn(
+    <aside className={cn(
       "h-screen fixed left-0 top-0 z-40 bg-white border-r transition-all duration-300",
-      collapsed ? "w-16" : "w-64"
+      collapsed ? "w-16" : "w-64",
+      "lg:fixed lg:block",
+      isMobile ? "mt-16" : "mt-0"
     )}>
-      {/* Logo section */}
-      <div className="h-16 flex items-center justify-between px-4 border-b">
-        {!collapsed && (
-          <span className="text-xl font-bold bg-gradient-to-r from-vento-primary to-vento-secondary bg-clip-text text-transparent">
-            Vento
-          </span>
-        )}
-        <Button 
-          variant="ghost" 
-          size="icon"
-          onClick={() => setCollapsed(!collapsed)}
-          className="ml-auto"
-        >
-          {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
-        </Button>
-      </div>
+      {/* Logo section - solo mostrar en desktop */}
+      {!isMobile && (
+        <div className="h-16 flex items-center justify-between px-4 border-b">
+          {!collapsed && (
+            <span className="text-xl font-bold bg-gradient-to-r from-vento-primary to-vento-secondary bg-clip-text text-transparent">
+              Vento
+            </span>
+          )}
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => setCollapsed(!collapsed)}
+            className="ml-auto"
+          >
+            {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+          </Button>
+        </div>
+      )}
 
       {/* Navigation */}
       <nav className="p-2 space-y-1">
@@ -73,6 +83,7 @@ const Sidebar = () => {
           <Link 
             key={item.path} 
             to={item.path}
+            onClick={onNavigate}
             className={cn(
               "flex items-center gap-3 px-3 py-2 rounded-md transition-colors",
               "hover:bg-gray-100",
@@ -99,7 +110,7 @@ const Sidebar = () => {
           {!collapsed && <span className="ml-3">Cerrar Sesión</span>}
         </Button>
       </div>
-    </div>
+    </aside>
   );
 };
 
