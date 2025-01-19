@@ -1,3 +1,4 @@
+// components/dashboard/Sidebar.tsx
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
@@ -18,9 +19,10 @@ interface SidebarProps {
   setCollapsed: (collapsed: boolean) => void;
   isMobile: boolean;
   onNavigate?: () => void;
+  isOpen: boolean;
 }
 
-const Sidebar = ({ collapsed, setCollapsed, isMobile, onNavigate }: SidebarProps) => {
+const Sidebar = ({ collapsed, setCollapsed, isMobile, onNavigate, isOpen }: SidebarProps) => {
   const location = useLocation();
 
   const menuItems = [
@@ -53,26 +55,37 @@ const Sidebar = ({ collapsed, setCollapsed, isMobile, onNavigate }: SidebarProps
 
   return (
     <aside className={cn(
-      "h-screen fixed left-0 top-0 z-40 bg-white border-r transition-all duration-300",
+      "fixed left-0 top-0 z-40 h-screen bg-white border-r",
+      "transform transition-all duration-300 ease-in-out",
       collapsed ? "w-16" : "w-64",
-      "lg:fixed lg:block",
-      isMobile ? "mt-16" : "mt-0"
+      isMobile ? "mt-16" : "mt-0",
+      // Animación para móvil
+      isMobile && !isOpen && "-translate-x-full",
+      isMobile && isOpen && "translate-x-0",
+      // Desktop siempre visible
+      !isMobile && "translate-x-0"
     )}>
       {/* Logo section - solo mostrar en desktop */}
       {!isMobile && (
         <div className="h-16 flex items-center justify-between px-4 border-b">
-          {!collapsed && (
-            <span className="text-xl font-bold bg-gradient-to-r from-vento-primary to-vento-secondary bg-clip-text text-transparent">
+          <div className={cn(
+            "transition-all duration-300 ease-in-out overflow-hidden",
+            collapsed ? "w-0 opacity-0" : "w-full opacity-100"
+          )}>
+            <span className="text-xl font-bold bg-gradient-to-r from-vento-primary to-vento-secondary bg-clip-text text-transparent whitespace-nowrap">
               Vento
             </span>
-          )}
+          </div>
           <Button 
             variant="ghost" 
             size="icon"
             onClick={() => setCollapsed(!collapsed)}
-            className="ml-auto"
+            className={cn(
+              "transition-transform duration-300",
+              collapsed ? "rotate-180" : "rotate-0"
+            )}
           >
-            {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+            <ChevronLeft size={20} />
           </Button>
         </div>
       )}
@@ -85,14 +98,25 @@ const Sidebar = ({ collapsed, setCollapsed, isMobile, onNavigate }: SidebarProps
             to={item.path}
             onClick={onNavigate}
             className={cn(
-              "flex items-center gap-3 px-3 py-2 rounded-md transition-colors",
+              "flex items-center gap-3 px-3 py-2 rounded-md",
+              "transition-all duration-300 ease-in-out",
               "hover:bg-gray-100",
               location.pathname === item.path ? "bg-gray-100 text-vento-primary" : "text-gray-600",
-              collapsed && "justify-center"
+              collapsed ? "justify-center" : "justify-start"
             )}
           >
-            {item.icon}
-            {!collapsed && <span>{item.title}</span>}
+            <span className={cn(
+              "transition-transform duration-300",
+              collapsed && "transform scale-110"
+            )}>
+              {item.icon}
+            </span>
+            <span className={cn(
+              "transition-all duration-300 ease-in-out overflow-hidden whitespace-nowrap",
+              collapsed ? "w-0 opacity-0" : "w-full opacity-100"
+            )}>
+              {item.title}
+            </span>
           </Link>
         ))}
       </nav>
@@ -103,11 +127,22 @@ const Sidebar = ({ collapsed, setCollapsed, isMobile, onNavigate }: SidebarProps
           variant="ghost" 
           className={cn(
             "w-full text-gray-600 hover:text-gray-900",
+            "transition-all duration-300 ease-in-out",
             collapsed ? "justify-center px-0" : "justify-start"
           )}
         >
-          <LogOut size={20} />
-          {!collapsed && <span className="ml-3">Cerrar Sesión</span>}
+          <span className={cn(
+            "transition-transform duration-300",
+            collapsed && "transform scale-110"
+          )}>
+            <LogOut size={20} />
+          </span>
+          <span className={cn(
+            "ml-3 transition-all duration-300 ease-in-out overflow-hidden whitespace-nowrap",
+            collapsed ? "w-0 opacity-0" : "w-full opacity-100"
+          )}>
+            Cerrar Sesión
+          </span>
         </Button>
       </div>
     </aside>

@@ -1,4 +1,3 @@
-// pages/dashboard/DashboardPage.tsx
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from '@/components/dashboard/Sidebar';
@@ -40,49 +39,56 @@ const DashboardPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header for mobile */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b z-40 flex items-center px-4">
-        <Button 
-          variant="outline" 
-          size="icon" 
-          onClick={toggleMobileMenu}
-          className="border-2 hover:bg-gray-100"
-        >
-          <Menu className="h-5 w-5" />
-        </Button>
-        <span className="ml-4 text-xl font-bold bg-gradient-to-r from-vento-primary to-vento-secondary bg-clip-text text-transparent">
-          Vento
-        </span>
-      </div>
+      <header className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b z-40">
+        <div className="flex items-center h-full px-4">
+          <Button 
+            variant="outline" 
+            size="icon" 
+            onClick={toggleMobileMenu}
+            className="border-2 hover:bg-gray-100"
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+          <span className="ml-4 text-xl font-bold bg-gradient-to-r from-vento-primary to-vento-secondary bg-clip-text text-transparent">
+            Vento
+          </span>
+        </div>
+      </header>
 
-      {/* Backdrop for mobile */}
+      {/* Backdrop with fade animation */}
       {sidebarOpen && isMobile && (
         <div 
-          className="fixed inset-0 bg-black/50 lg:hidden z-30"
+          className={cn(
+            "fixed inset-0 bg-black/50 lg:hidden z-30",
+            "transition-opacity duration-300 ease-in-out",
+            sidebarOpen ? "opacity-100" : "opacity-0"
+          )}
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <div className={cn(
-        "lg:block",
-        sidebarOpen ? "block" : "hidden"
-      )}>
-        <Sidebar 
-          collapsed={collapsed} 
-          setCollapsed={setCollapsed}
-          isMobile={isMobile}
-          onNavigate={() => isMobile && setSidebarOpen(false)}
-        />
-      </div>
+      <Sidebar 
+        collapsed={collapsed} 
+        setCollapsed={setCollapsed}
+        isMobile={isMobile}
+        isOpen={sidebarOpen}
+        onNavigate={() => isMobile && setSidebarOpen(false)}
+      />
 
       {/* Main content */}
       <main className={cn(
-        "transition-all duration-300",
+        "min-h-screen transition-all duration-300 ease-in-out",
+        // Ajuste de padding izquierdo para desktop
         collapsed ? "lg:pl-16" : "lg:pl-64",
-        "pt-20 lg:pt-4",
-        "p-4 sm:p-6 lg:p-8"
+        // Padding superior considerando el header móvil
+        "pt-24 lg:pt-8", // Aumentado el padding top en móvil
+        // Padding general
+        "px-4 sm:px-6 lg:px-8",
+        // Padding inferior
+        "pb-8"
       )}>
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto w-full">
           <Outlet />
         </div>
       </main>
