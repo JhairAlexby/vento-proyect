@@ -3,9 +3,27 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft } from 'lucide-react';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
-// LoginPage.tsx
+
 export const LoginPage = () => {
+
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    // Aquí irá tu lógica de autenticación real
+    // Por ahora solo simulamos un delay
+    setTimeout(() => {
+      setIsLoading(false);
+      navigate('/dashboard');
+    }, 1000);
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-vento-primary-light to-vento-secondary-light px-4">
       <div className="absolute top-4 left-4">
@@ -43,7 +61,7 @@ export const LoginPage = () => {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <Button className="w-full bg-gradient-to-r from-vento-primary to-vento-secondary text-white hover:opacity-90">
+          <Button onClick={handleLogin} className="w-full bg-gradient-to-r from-vento-primary to-vento-secondary text-white hover:opacity-90">
             Iniciar Sesión
           </Button>
           <div className="text-sm text-center text-gray-500">
