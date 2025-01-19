@@ -2,7 +2,7 @@ import React from 'react';
 import SalesOverview from '@/components/statistics/SalesOverview';
 import WeeklySalesChart from '@/components/statistics/WeeklySalesChart';
 import ProfitSummary from '@/components/statistics/ProfitSummary';
-import type { SalesData } from '@/components/statistics/types';
+import type { SalesData } from '@/types/statistics';
 
 const mockData: SalesData = {
   ventasDiarias: 4800,

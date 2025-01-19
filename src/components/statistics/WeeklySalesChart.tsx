@@ -10,7 +10,7 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts';
-import type { SalesData } from './types';
+import type { SalesData } from '../../types/statistics';
 
 interface WeeklySalesChartProps {
   data: SalesData['ventasPorDia'];

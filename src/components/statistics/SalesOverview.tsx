@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign, TrendingUp, ArrowUpRight, ArrowDownRight, Wallet } from 'lucide-react';
 import { cn } from "@/lib/utils";
-import type { SalesData, SalesTrend } from './types';
+import type { SalesData, SalesTrend } from '../../types/statistics';
 
 interface SalesOverviewProps {
   data: Pick<SalesData, 'ventasDiarias' | 'ventasSemanales' | 'ventasMensuales' | 'tendencias'>;
