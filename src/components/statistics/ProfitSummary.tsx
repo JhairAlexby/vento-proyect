@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Wallet, PiggyBank } from 'lucide-react';
-import type { SalesData } from './types';
+import type { SalesData } from '../../types/statistics';
 
 interface ProfitSummaryProps {
   data: Pick<SalesData, 'reinversion' | 'gananciaPersonal'>;

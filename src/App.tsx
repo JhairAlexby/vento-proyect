@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
-import LandingPage from './page/LandingPage'
-import { LoginPage } from './page/auth/LoginPage'
-import { RegisterPage } from './page/auth/RegisterPage'
-import DashboardPage from './page/dashboard/DashboardPage'
-import StatisticsPage from './page/dashboard/StatisticsPage'
-import MenuPage from './page/dashboard/MenuPage'
-import OrdersPage from './page/dashboard/OrdersPage'
+import LandingPage from './pages/LandingPage'
+import { LoginPage } from './pages/auth/LoginPage'
+import { RegisterPage } from './pages/auth/RegisterPage'
+import DashboardPage from './pages/dashboard/DashboardPage'
+import StatisticsPage from './pages/dashboard/StatisticsPage'
+import MenuPage from './pages/dashboard/MenuPage'
+import OrdersPage from './pages/dashboard/OrdersPage'
 
 
 

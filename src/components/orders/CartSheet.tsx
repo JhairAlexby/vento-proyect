@@ -27,7 +27,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Trash2, AlertCircle, Plus, Minus } from 'lucide-react';
-import type { CartItem } from '../../components/orders/types/orders';
+import type { CartItem } from '../../types/orders';
 
 interface CartSheetProps {
   open: boolean;

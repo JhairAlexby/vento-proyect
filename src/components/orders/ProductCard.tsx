@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus } from 'lucide-react';
-import type { Product } from '../../components/orders/types/orders';
+import type { Product } from '../../types/orders';
 
 interface ProductCardProps {
     product: Product;

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart } from 'lucide-react';
 import ProductCard from '@/components/orders/ProductCard';
 import CartSheet from '@/components/orders/CartSheet';
-import type { Product, CartItem, Order } from '../../components/orders/types/orders';
+import type { Product, CartItem, Order } from '../../types/orders';
 const mockProducts: Product[] = [
   {
     _id: '1',
