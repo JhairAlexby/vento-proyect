@@ -1,12 +1,9 @@
-// pages/dashboard/OrdersPage.tsx
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from 'lucide-react';
 import ProductCard from '@/components/orders/ProductCard';
 import CartSheet from '@/components/orders/CartSheet';
 import type { Product, CartItem, Order } from '../../components/orders/types/orders';
-
-// Datos de ejemplo (esto vendrá del backend)
 const mockProducts: Product[] = [
   {
     _id: '1',
@@ -33,7 +30,6 @@ const OrdersPage = () => {
   const [cartItems, setCartItems] = React.useState<CartItem[]>([]);
   const [cartOpen, setCartOpen] = React.useState(false);
 
-  // Cargar productos (simulación de llamada a API)
   React.useEffect(() => {
     setProducts(mockProducts);
   }, []);
@@ -99,6 +95,8 @@ const OrdersPage = () => {
     setCartOpen(false);
   };
 
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -113,7 +111,7 @@ const OrdersPage = () => {
           onClick={() => setCartOpen(true)}
         >
           <ShoppingCart className="h-5 w-5" />
-          <span>Carrito ({cartItems.length})</span>
+          <span>Carrito ({totalItems})</span>
         </Button>
       </div>
 
@@ -123,10 +121,7 @@ const OrdersPage = () => {
           <ProductCard
             key={product._id}
             product={product}
-            onAddToCart={(product) => {
-              handleAddToCart(product);
-              setCartOpen(true);
-            }}
+            onAddToCart={handleAddToCart}
           />
         ))}
       </div>
