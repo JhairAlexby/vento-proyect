@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import LandingPage from './pages/LandingPage'
 import { LoginPage } from './pages/auth/LoginPage'
 import { RegisterPage } from './pages/auth/RegisterPage'
@@ -8,13 +7,9 @@ import StatisticsPage from './pages/dashboard/StatisticsPage'
 import MenuPage from './pages/dashboard/MenuPage'
 import OrdersPage from './pages/dashboard/OrdersPage'
 import SalesPage from './pages/dashboard/SalesPage'
-
-
-
+import NotFoundPage from './pages/NotFoundPage'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <Router>
       <Routes>
@@ -30,6 +25,8 @@ function App() {
           <Route path="sales" element={<SalesPage />} />
           <Route path="statistics" element={<StatisticsPage />} />
         </Route>
+
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
   )
