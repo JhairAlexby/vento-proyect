@@ -3,6 +3,7 @@ import LandingPage from './pages/LandingPage'
 import { LoginPage } from './pages/auth/LoginPage'
 import { RegisterPage } from './pages/auth/RegisterPage'
 import DashboardPage from './pages/dashboard/DashboardPage'
+import DashboardOverview from './pages/dashboard/DashboardOverview'
 import StatisticsPage from './pages/dashboard/StatisticsPage'
 import MenuPage from './pages/dashboard/MenuPage'
 import OrdersPage from './pages/dashboard/OrdersPage'
@@ -17,9 +18,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        {/* Dashboard routes */}
         <Route path="/dashboard" element={<DashboardPage />}>
-          <Route index element={<StatisticsPage />} />
+          <Route index element={<DashboardOverview />} />
           <Route path="orders" element={<OrdersPage />} />
           <Route path="menu" element={<MenuPage />} />
           <Route path="sales" element={<SalesPage />} />
