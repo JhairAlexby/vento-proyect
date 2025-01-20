@@ -7,6 +7,7 @@ import DashboardPage from './pages/dashboard/DashboardPage'
 import StatisticsPage from './pages/dashboard/StatisticsPage'
 import MenuPage from './pages/dashboard/MenuPage'
 import OrdersPage from './pages/dashboard/OrdersPage'
+import SalesPage from './pages/dashboard/SalesPage'
 
 
 
@@ -26,7 +27,7 @@ function App() {
           <Route index element={<StatisticsPage />} />
           <Route path="orders" element={<OrdersPage />} />
           <Route path="menu" element={<MenuPage />} />
-          <Route path="sales" element={<div>Ventas</div>} />
+          <Route path="sales" element={<SalesPage />} />
           <Route path="statistics" element={<StatisticsPage />} />
         </Route>
       </Routes>
