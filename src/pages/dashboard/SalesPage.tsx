@@ -141,7 +141,7 @@ const SalesPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card>
           <CardHeader>
-            <CardTitle>Ganancias Personales</CardTitle>
+            <CardTitle>Ganancias Personales del dia</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-4xl font-bold text-green-600">
@@ -151,7 +151,7 @@ const SalesPage = () => {
         </Card>
         <Card>
           <CardHeader>  
-            <CardTitle>Parte destinada a la reinversion Reinversión</CardTitle>
+            <CardTitle>Parte destinada a la reinversion Reinversión del dia </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-4xl font-bold text-blue-600">
