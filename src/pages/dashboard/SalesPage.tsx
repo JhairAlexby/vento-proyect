@@ -137,6 +137,30 @@ const SalesPage = () => {
           </Table>
         </CardContent>
       </Card>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Ganancias Personales</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-4xl font-bold text-green-600">
+              $1,350.00
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>  
+            <CardTitle>Parte destinada a la reinversion Reinversión</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-4xl font-bold text-blue-600">
+              $900.00
+            </p>
+          </CardContent>  
+        </Card>
+      </div>
+      
     </div>
   );
 };
