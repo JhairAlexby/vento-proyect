@@ -3,12 +3,19 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
 export const RegisterPage = () => {
+    const navigate = useNavigate();
+    
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-vento-primary-light to-vento-secondary-light px-4">
         <div className="absolute top-4 left-4">
-          <Button variant="ghost" className="flex items-center gap-2" onClick={() => window.history.back()}>
+          <Button 
+            variant="ghost" 
+            className="flex items-center gap-2" 
+            onClick={() => navigate('/')}
+          >
             <ArrowLeft className="h-4 w-4" />
             Volver
           </Button>

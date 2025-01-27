@@ -10,26 +10,39 @@ import OrdersPage from './pages/dashboard/OrdersPage'
 import SalesPage from './pages/dashboard/SalesPage'
 import NotFoundPage from './pages/NotFoundPage'
 
+import { AuthProvider } from './contexts/AuthContext';
+import PrivateRoute from './components/auth/PrivateRoute';
+
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
-        <Route path="/dashboard" element={<DashboardPage />}>
-          <Route index element={<DashboardOverview />} />
-          <Route path="orders" element={<OrdersPage />} />
-          <Route path="menu" element={<MenuPage />} />
-          <Route path="sales" element={<SalesPage />} />
-          <Route path="statistics" element={<StatisticsPage />} />
-        </Route>
+          {/* Protected Dashboard Routes */}
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <DashboardPage />
+              </PrivateRoute>
+            }
+          >
+            <Route index element={<DashboardOverview />} />
+            <Route path="orders" element={<OrdersPage />} />
+            <Route path="menu" element={<MenuPage />} />
+            <Route path="sales" element={<SalesPage />} />
+            <Route path="statistics" element={<StatisticsPage />} />
+          </Route>
 
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </Router>
-  )
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

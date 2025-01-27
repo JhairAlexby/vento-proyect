@@ -4,11 +4,14 @@ import { LoginCredentials, RegisterData, User } from '@/types/auth';
 
 export const authApi = {
   login: (credentials: LoginCredentials) => 
-    axiosInstance.post<User>(API_ENDPOINTS.auth.LOGIN, credentials),
+    axiosInstance.post<{ user: User }>(API_ENDPOINTS.auth.LOGIN, credentials),
     
   register: (userData: RegisterData) =>
-    axiosInstance.post<User>(API_ENDPOINTS.auth.REGISTER, userData),
+    axiosInstance.post<{ user: User }>(API_ENDPOINTS.auth.REGISTER, userData),
     
   logout: () => 
-    axiosInstance.post(API_ENDPOINTS.auth.LOGOUT)
+    axiosInstance.post(API_ENDPOINTS.auth.LOGOUT),
+
+  verifySession: () =>
+    axiosInstance.get<User>(API_ENDPOINTS.auth.VERIFY)
 };

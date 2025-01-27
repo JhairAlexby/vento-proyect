@@ -1,9 +1,10 @@
 export const API_ENDPOINTS = {
-    auth: {
-      LOGIN: '/auth/login',
-      REGISTER: '/auth/register',
-      LOGOUT: '/auth/logout',
-    },
+  auth: {
+    LOGIN: '/auth/login',
+    REGISTER: '/auth/register',
+    LOGOUT: '/auth/logout',
+    VERIFY: '/auth/verify',
+  },
     products: {
       BASE: '/products',
       BY_ID: (id: string) => `/products/${id}`,
