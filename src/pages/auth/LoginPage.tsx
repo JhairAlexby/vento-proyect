@@ -35,7 +35,11 @@ export const LoginPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-vento-primary-light to-vento-secondary-light px-4">
       <div className="absolute top-4 left-4">
-        <Button variant="ghost" className="flex items-center gap-2" onClick={() => window.history.back()}>
+        <Button 
+          variant="ghost" 
+          className="flex items-center gap-2" 
+          onClick={() => navigate('/')}
+        >
           <ArrowLeft className="h-4 w-4" />
           Volver
         </Button>
