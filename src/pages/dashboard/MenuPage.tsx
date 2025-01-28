@@ -35,17 +35,21 @@ const MenuPage = () => {
   const handleSaveProduct = async (data: MenuItemInput) => {
     try {
       setIsSaving(true);
+      setError(null);
+  
       if (editingProduct) {
         await productApi.update(editingProduct._id, data);
       } else {
         await productApi.create(data);
       }
+  
       await loadProducts();
       setDialogOpen(false);
       setEditingProduct(undefined);
     } catch (err) {
-      setError('Error al guardar el producto');
-      console.error('Error saving product:', err);
+      setError(editingProduct 
+        ? 'Error al actualizar el producto' 
+        : 'Error al crear el producto');
     } finally {
       setIsSaving(false);
     }
@@ -66,7 +70,12 @@ const MenuPage = () => {
     }
   };
 
-  if (isLoading) {
+  const handleEdit = (product: MenuItem) => {
+    setEditingProduct(product);
+    setDialogOpen(true);
+  };
+
+  if (isLoading && menu.length === 0) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-vento-primary"></div>
@@ -107,7 +116,6 @@ const MenuPage = () => {
         </div>
       )}
 
-      {/* Grid de productos */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {menu.map((item) => (
           <Card key={item._id} className="hover:shadow-lg transition-shadow">
@@ -126,10 +134,7 @@ const MenuPage = () => {
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={() => {
-                  setEditingProduct(item);
-                  setDialogOpen(true);
-                }}
+                onClick={() => handleEdit(item)}
               >
                 <Edit className="h-4 w-4 mr-2" />
                 Editar

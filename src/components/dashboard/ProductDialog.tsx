@@ -5,6 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -77,10 +78,13 @@ const ProductDialog = ({
     }
 
     try {
-      await onSave(formData);
+      await onSave({
+        name: formData.name.trim(),
+        description: formData.description.trim(),
+        price: Number(formData.price)
+      });
       setFormData(initialFormData);
     } catch (error) {
-      console.error('Error al guardar el producto:', error);
     }
   };
 
@@ -92,6 +96,11 @@ const ProductDialog = ({
             <DialogTitle>
               {initialData ? 'Editar Producto' : 'Nuevo Producto'}
             </DialogTitle>
+            <DialogDescription>
+              {initialData 
+                ? 'Modifica los detalles del producto seleccionado.' 
+                : 'Completa los detalles para crear un nuevo producto.'}
+            </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
