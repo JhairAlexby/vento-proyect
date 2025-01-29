@@ -1,11 +1,11 @@
 import React from 'react';
-import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetFooter,
+  SheetDescription,
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,7 +28,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Trash2, AlertCircle, Plus, Minus } from 'lucide-react';
-import type { CartItem } from '../../types/orders';
+import type { CartItem } from '@/types/orders';
 
 interface CartSheetProps {
   open: boolean;
@@ -57,6 +58,9 @@ const CartSheet = ({
         <SheetContent className="w-[400px] sm:w-[540px] flex flex-col">
           <SheetHeader>
             <SheetTitle>Carrito de Pedido</SheetTitle>
+            <SheetDescription>
+              Revisa y confirma los productos seleccionados.
+            </SheetDescription>
           </SheetHeader>
           
           <div className="flex-1 overflow-auto py-4">

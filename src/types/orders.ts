@@ -21,7 +21,6 @@ export interface Product {
     order_date: string;
   }
   
-  // Para el manejo del carrito en el UI
   export interface CartItem extends OrderItem {
     productName: string;
     description: string;

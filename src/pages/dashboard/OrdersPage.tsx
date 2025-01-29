@@ -15,7 +15,6 @@ const OrdersPage = () => {
   const [cartOpen, setCartOpen] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  // Cargar productos al montar el componente
   React.useEffect(() => {
     loadProducts();
   }, []);
@@ -91,11 +90,9 @@ const OrdersPage = () => {
 
       await orderApi.create(orderData);
       
-      // Limpiar carrito después de crear la orden
       setCartItems([]);
       setCartOpen(false);
       
-      // Aquí podrías mostrar un mensaje de éxito
       alert('Pedido creado exitosamente');
       
     } catch (err) {
