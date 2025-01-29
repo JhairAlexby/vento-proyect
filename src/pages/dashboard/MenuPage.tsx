@@ -2,83 +2,92 @@ import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Edit, Trash2 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import ProductDialog from '../../components/dashboard/ProductDialog';
+import ProductDialog from '@/components/dashboard/ProductDialog';
 import { MenuItem, MenuItemInput } from '@/types/menu';
-
-const initialMenu: MenuItem[] = [
-  {
-    id: '1',
-    name: 'Hamburguesa Clásica',
-    price: 8.99,
-    category: 'hamburguesas',
-    description: 'Carne, lechuga, tomate, queso'
-  },
-  {
-    id: '2',
-    name: 'Hamburguesa Doble',
-    price: 12.99,
-    category: 'hamburguesas',
-    description: 'Doble carne, doble queso, lechuga, tomate'
-  },
-  {
-    id: '3',
-    name: 'Hot Dog Clásico',
-    price: 5.99,
-    category: 'hotdogs',
-    description: 'Salchicha, mostaza, ketchup'
-  },
-  {
-    id: '4',
-    name: 'Hot Dog con Queso',
-    price: 7.99,
-    category: 'hotdogs',
-    description: 'Salchicha, queso, mostaza, ketchup'
-  },
-  {
-    id: '5',
-    name: 'Hamburguesa de Pollo',
-    price: 9.99,
-    category: 'hamburguesas',
-    description: 'Pechuga de pollo, lechuga, tomate, queso'
-  },
-  {
-    id: '6',
-    name: 'Hot Dog con Tocino',
-    price: 8.99,
-    category: 'hotdogs',
-    description: 'Salchicha, tocino, queso, mostaza, ketchup'
-    
-  }
-];
+import { productApi } from '@/services/api/productApi';
 
 const MenuPage = () => {
-  const [selectedCategory, setSelectedCategory] = React.useState<'todos' | 'hamburguesas' | 'hotdogs'>('todos');
-  const [menu, setMenu] = React.useState<MenuItem[]>(initialMenu);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+  const [menu, setMenu] = React.useState<MenuItem[]>([]);
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [editingProduct, setEditingProduct] = React.useState<MenuItem | undefined>();
+  const [isSaving, setIsSaving] = React.useState(false);
 
-  const filteredMenu = menu.filter(item => 
-    selectedCategory === 'todos' ? true : item.category === selectedCategory
-  );
+  React.useEffect(() => {
+    loadProducts();
+  }, []);
 
-  const handleSaveProduct = (data: MenuItemInput) => {
-    if (editingProduct) {
-      // Actualizar producto existente
-      setMenu(menu.map(item => 
-        item.id === editingProduct.id ? { ...data, id: editingProduct.id } : item
-      ));
-    } else {
-      // Agregar nuevo producto
-      setMenu([...menu, { ...data, id: Date.now().toString() }]);
+  const loadProducts = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const response = await productApi.getAll();
+      setMenu(response.data.products);
+    } catch (err) {
+      setError('Error al cargar los productos');
+      console.error('Error loading products:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleDelete = (id: string) => {
+  const handleSaveProduct = async (data: MenuItemInput) => {
+    try {
+      setIsSaving(true);
+      setError(null);
+  
+      if (editingProduct) {
+        await productApi.update(editingProduct._id, data);
+      } else {
+        await productApi.create({
+          name: data.name.trim(),
+          description: data.description.trim(),
+          price: Number(data.price)
+        });
+      }
+  
+      await loadProducts(); 
+      setDialogOpen(false);
+      setEditingProduct(undefined);
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || 
+        (editingProduct 
+          ? 'Error al actualizar el producto' 
+          : 'Error al crear el producto');
+      setError(errorMessage);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
     if (window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
-      setMenu(menu.filter(item => item.id !== id));
+      try {
+        setIsLoading(true);
+        await productApi.delete(id);
+        await loadProducts();
+      } catch (err) {
+        setError('Error al eliminar el producto');
+        console.error('Error deleting product:', err);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
+
+  const handleEdit = (product: MenuItem) => {
+    setEditingProduct(product);
+    setDialogOpen(true);
+  };
+
+  if (isLoading && menu.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-vento-primary"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -100,26 +109,22 @@ const MenuPage = () => {
         </Button>
       </div>
 
-      {/* Categorías */}
-      <div className="flex gap-2">
-        {['todos', 'hamburguesas', 'hotdogs'].map((category) => (
-          <Button
-            key={category}
-            variant={selectedCategory === category ? "default" : "outline"}
-            onClick={() => setSelectedCategory(category as any)}
-            className={cn(
-              selectedCategory === category && "bg-gradient-to-r from-vento-primary to-vento-secondary text-white"
-            )}
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-600 rounded-md p-4 flex justify-between items-center">
+          <span>{error}</span>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => setError(null)}
           >
-            {category.charAt(0).toUpperCase() + category.slice(1)}
+            Cerrar
           </Button>
-        ))}
-      </div>
+        </div>
+      )}
 
-      {/* Grid de productos */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredMenu.map((item) => (
-          <Card key={item.id} className="hover:shadow-lg transition-shadow">
+        {menu.map((item) => (
+          <Card key={item._id} className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <CardTitle className="flex justify-between items-start">
                 <span>{item.name}</span>
@@ -130,20 +135,12 @@ const MenuPage = () => {
             </CardHeader>
             <CardContent>
               <p className="text-gray-600">{item.description}</p>
-              <div className="mt-2">
-                <span className="inline-block px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-600">
-                  {item.category}
-                </span>
-              </div>
             </CardContent>
             <CardFooter className="flex justify-end gap-2">
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={() => {
-                  setEditingProduct(item);
-                  setDialogOpen(true);
-                }}
+                onClick={() => handleEdit(item)}
               >
                 <Edit className="h-4 w-4 mr-2" />
                 Editar
@@ -152,7 +149,7 @@ const MenuPage = () => {
                 variant="outline" 
                 size="sm" 
                 className="text-red-600 hover:bg-red-50"
-                onClick={() => handleDelete(item.id)}
+                onClick={() => handleDelete(item._id)}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
                 Eliminar
@@ -162,7 +159,6 @@ const MenuPage = () => {
         ))}
       </div>
 
-      {/* Dialog para crear/editar productos */}
       <ProductDialog
         open={dialogOpen}
         onOpenChange={(open) => {
@@ -171,6 +167,7 @@ const MenuPage = () => {
         }}
         initialData={editingProduct}
         onSave={handleSaveProduct}
+        isLoading={isSaving}
       />
     </div>
   );
