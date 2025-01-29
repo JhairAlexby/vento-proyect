@@ -1,27 +1,29 @@
-// src/types/orders.ts
 export interface Product {
     _id: string;
     name: string;
     description: string;
     price: number;
-}
-
-export interface OrderItem {
-    product: string; // ObjectId del producto
+  }
+  
+  export interface OrderItem {
+    product: string;
     quantity: number;
     price: number;
-}
-
-export interface Order {
-    _id?: string;
-    user: string; // ObjectId del usuario
-    order_date: Date;
+  }
+  
+  export interface OrderInput {
     items: OrderItem[];
-}
-
-// Para el carrito, necesitamos información adicional temporal
-export interface CartItem extends OrderItem {
-    productName: string; // Para mostrar en el UI
-    description: string; // Para mostrar en el UI
-    subtotal: number; // Campo calculado
-}
+  }
+  
+  export interface Order extends OrderInput {
+    _id: string;
+    user: string;
+    order_date: string;
+  }
+  
+  // Para el manejo del carrito en el UI
+  export interface CartItem extends OrderItem {
+    productName: string;
+    description: string;
+    subtotal: number;
+  }

@@ -3,36 +3,35 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart } from 'lucide-react';
 import ProductCard from '@/components/orders/ProductCard';
 import CartSheet from '@/components/orders/CartSheet';
-import type { Product, CartItem, Order } from '../../types/orders';
-const mockProducts: Product[] = [
-  {
-    _id: '1',
-    name: 'Hamburguesa Clásica',
-    description: 'Carne, lechuga, tomate, queso',
-    price: 8.99
-  },
-  {
-    _id: '2',
-    name: 'Hamburguesa Doble',
-    description: 'Doble carne, doble queso, lechuga, tomate',
-    price: 12.99
-  },
-  {
-    _id: '3',
-    name: 'Hot Dog Clásico',
-    description: 'Salchicha, mostaza, ketchup',
-    price: 5.99
-  }
-];
+import { Product, CartItem } from '@/types/orders';
+import { productApi } from '@/services/api/productApi';
+import { orderApi } from '@/services/api/orderApi';
 
 const OrdersPage = () => {
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
   const [products, setProducts] = React.useState<Product[]>([]);
   const [cartItems, setCartItems] = React.useState<CartItem[]>([]);
   const [cartOpen, setCartOpen] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
+  // Cargar productos al montar el componente
   React.useEffect(() => {
-    setProducts(mockProducts);
+    loadProducts();
   }, []);
+
+  const loadProducts = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const response = await productApi.getAll();
+      setProducts(response.data.products);
+    } catch (err) {
+      setError('Error al cargar los productos');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleAddToCart = (product: Product) => {
     setCartItems(prevItems => {
@@ -75,31 +74,49 @@ const OrdersPage = () => {
     setCartItems(prevItems => prevItems.filter(item => item.product !== productId));
   };
 
-  const handleConfirmOrder = () => {
-    // Preparar orden según el modelo de la BD
-    const order: Order = {
-      user: 'current-user-id', // TODO: Obtener del contexto de autenticación
-      order_date: new Date(),
-      items: cartItems.map(({ product, quantity, price }) => ({
-        product,
-        quantity,
-        price
-      }))
-    };
+  const handleConfirmOrder = async () => {
+    if (cartItems.length === 0) return;
 
-    // TODO: Enviar a la API
-    console.log('Orden a enviar:', order);
-    
-    // Limpiar carrito
-    setCartItems([]);
-    setCartOpen(false);
+    try {
+      setIsSubmitting(true);
+      setError(null);
+
+      const orderData = {
+        items: cartItems.map(item => ({
+          product: item.product,
+          quantity: item.quantity,
+          price: item.price
+        }))
+      };
+
+      await orderApi.create(orderData);
+      
+      // Limpiar carrito después de crear la orden
+      setCartItems([]);
+      setCartOpen(false);
+      
+      // Aquí podrías mostrar un mensaje de éxito
+      alert('Pedido creado exitosamente');
+      
+    } catch (err) {
+      setError('Error al crear el pedido');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-vento-primary"></div>
+      </div>
+    );
+  }
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Nuevo Pedido</h1>
@@ -115,7 +132,12 @@ const OrdersPage = () => {
         </Button>
       </div>
 
-      {/* Grid de productos */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-600 rounded-md p-4">
+          {error}
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {products.map(product => (
           <ProductCard
@@ -126,7 +148,6 @@ const OrdersPage = () => {
         ))}
       </div>
 
-      {/* Carrito como Sheet */}
       <CartSheet
         open={cartOpen}
         onOpenChange={setCartOpen}
@@ -134,6 +155,7 @@ const OrdersPage = () => {
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
         onConfirmOrder={handleConfirmOrder}
+        isSubmitting={isSubmitting}
       />
     </div>
   );
