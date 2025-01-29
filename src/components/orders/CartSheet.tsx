@@ -1,11 +1,11 @@
 import React from 'react';
-import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetFooter,
+  SheetDescription,
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,7 +28,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Trash2, AlertCircle, Plus, Minus } from 'lucide-react';
-import type { CartItem } from '../../types/orders';
+import type { CartItem } from '@/types/orders';
 
 interface CartSheetProps {
   open: boolean;
@@ -36,6 +37,7 @@ interface CartSheetProps {
   onUpdateQuantity: (productId: string, quantity: number) => void;
   onRemoveItem: (productId: string) => void;
   onConfirmOrder: () => void;
+  isSubmitting?: boolean;
 }
 
 const CartSheet = ({ 
@@ -44,7 +46,8 @@ const CartSheet = ({
   items, 
   onUpdateQuantity, 
   onRemoveItem, 
-  onConfirmOrder 
+  onConfirmOrder,
+  isSubmitting = false
 }: CartSheetProps) => {
   const [confirmOpen, setConfirmOpen] = React.useState(false);
   const total = items.reduce((sum, item) => sum + item.subtotal, 0);
@@ -55,6 +58,9 @@ const CartSheet = ({
         <SheetContent className="w-[400px] sm:w-[540px] flex flex-col">
           <SheetHeader>
             <SheetTitle>Carrito de Pedido</SheetTitle>
+            <SheetDescription>
+              Revisa y confirma los productos seleccionados.
+            </SheetDescription>
           </SheetHeader>
           
           <div className="flex-1 overflow-auto py-4">
@@ -88,6 +94,7 @@ const CartSheet = ({
                             size="icon"
                             className="h-8 w-8"
                             onClick={() => onUpdateQuantity(item.product, Math.max(1, item.quantity - 1))}
+                            disabled={isSubmitting}
                           >
                             <Minus className="h-4 w-4" />
                           </Button>
@@ -97,6 +104,7 @@ const CartSheet = ({
                             size="icon"
                             className="h-8 w-8"
                             onClick={() => onUpdateQuantity(item.product, item.quantity + 1)}
+                            disabled={isSubmitting}
                           >
                             <Plus className="h-4 w-4" />
                           </Button>
@@ -111,6 +119,7 @@ const CartSheet = ({
                           size="icon"
                           className="h-8 w-8 text-red-600 hover:text-red-700"
                           onClick={() => onRemoveItem(item.product)}
+                          disabled={isSubmitting}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -131,10 +140,10 @@ const CartSheet = ({
               </div>
               <Button 
                 className="w-full bg-gradient-to-r from-vento-primary to-vento-secondary text-white"
-                disabled={items.length === 0}
+                disabled={items.length === 0 || isSubmitting}
                 onClick={() => setConfirmOpen(true)}
               >
-                Confirmar Pedido
+                {isSubmitting ? 'Procesando...' : 'Confirmar Pedido'}
               </Button>
             </div>
           </div>
@@ -154,16 +163,16 @@ const CartSheet = ({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel disabled={isSubmitting}>Cancelar</AlertDialogCancel>
             <AlertDialogAction 
               onClick={() => {
                 onConfirmOrder();
                 setConfirmOpen(false);
-                onOpenChange(false);
               }}
+              disabled={isSubmitting}
               className="bg-gradient-to-r from-vento-primary to-vento-secondary text-white"
             >
-              Confirmar
+              {isSubmitting ? 'Procesando...' : 'Confirmar'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
