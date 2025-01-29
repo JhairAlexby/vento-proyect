@@ -9,8 +9,8 @@ export interface MenuItem {
 
 export interface MenuItemInput {
   name: string;
-  price: number;
   description: string;
+  price: number | undefined;
 }
 
 export interface ProductResponse {

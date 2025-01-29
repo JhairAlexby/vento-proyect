@@ -24,7 +24,7 @@ interface ProductDialogProps {
 
 const initialFormData: MenuItemInput = {
   name: '',
-  price: 0,
+  price: undefined,
   description: ''
 };
 
@@ -54,26 +54,32 @@ const ProductDialog = ({
   const validateForm = (): boolean => {
     const newErrors: Partial<Record<keyof MenuItemInput, string>> = {};
     
-    const trimmedName = formData.name.trim();
-    if (!trimmedName) {
+    if (!formData.name.trim()) {
       newErrors.name = 'El nombre es requerido';
-    } else if (trimmedName.length < 3) {
+    } else if (formData.name.trim().length < 3) {
       newErrors.name = 'El nombre debe tener al menos 3 caracteres';
     }
     
-    if (!formData.price || formData.price <= 0) {
+    if (!formData.price || isNaN(formData.price) || formData.price <= 0) {
       newErrors.price = 'El precio debe ser mayor a 0';
     }
     
-    const trimmedDescription = formData.description.trim();
-    if (!trimmedDescription) {
+    if (!formData.description.trim()) {
       newErrors.description = 'La descripción es requerida';
-    } else if (trimmedDescription.length < 5) {
+    } else if (formData.description.trim().length < 10) {
       newErrors.description = 'La descripción debe tener al menos 10 caracteres';
     }
-  
+
     setValidationErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setFormData({
+      ...formData,
+      price: value === '' ? undefined : parseFloat(value)
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -91,6 +97,7 @@ const ProductDialog = ({
       });
       setFormData(initialFormData);
     } catch (error) {
+      // Error se maneja en el componente padre
     }
   };
 
@@ -119,6 +126,7 @@ const ProductDialog = ({
                 className={cn(
                   validationErrors.name && "border-red-500"
                 )}
+                placeholder="Nombre del producto"
               />
               {validationErrors.name && (
                 <span className="text-sm text-red-500">{validationErrors.name}</span>
@@ -132,12 +140,13 @@ const ProductDialog = ({
                 type="number"
                 step="0.01"
                 min="0"
-                value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
+                value={formData.price === undefined ? '' : formData.price}
+                onChange={handlePriceChange}
                 disabled={isLoading}
                 className={cn(
                   validationErrors.price && "border-red-500"
                 )}
+                placeholder="0.00"
               />
               {validationErrors.price && (
                 <span className="text-sm text-red-500">{validationErrors.price}</span>
@@ -154,6 +163,7 @@ const ProductDialog = ({
                 className={cn(
                   validationErrors.description && "border-red-500"
                 )}
+                placeholder="Descripción detallada del producto"
               />
               {validationErrors.description && (
                 <span className="text-sm text-red-500">{validationErrors.description}</span>

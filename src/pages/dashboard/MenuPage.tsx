@@ -40,7 +40,6 @@ const MenuPage = () => {
       if (editingProduct) {
         await productApi.update(editingProduct._id, data);
       } else {
-        // Crear nuevo producto
         await productApi.create({
           name: data.name.trim(),
           description: data.description.trim(),
@@ -48,11 +47,10 @@ const MenuPage = () => {
         });
       }
   
-      await loadProducts(); // Recargar la lista
+      await loadProducts(); 
       setDialogOpen(false);
       setEditingProduct(undefined);
     } catch (err: any) {
-      // Manejo más específico del error
       const errorMessage = err.response?.data?.message || 
         (editingProduct 
           ? 'Error al actualizar el producto' 
