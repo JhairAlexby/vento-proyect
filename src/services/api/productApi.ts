@@ -6,8 +6,15 @@ export const productApi = {
   getAll: () => 
     axiosInstance.get<ProductResponse>(API_ENDPOINTS.products.BASE),
   
-  create: (productData: MenuItemInput) =>
-    axiosInstance.post<MenuItem>(API_ENDPOINTS.products.BASE, productData),
+  create: (productData: MenuItemInput) => {
+    const createData = {
+      name: productData.name.trim(),
+      description: productData.description.trim(),
+      price: Number(productData.price)
+    };
+    
+    return axiosInstance.post<MenuItem>(API_ENDPOINTS.products.BASE, createData);
+  },
   
   update: (id: string, productData: MenuItemInput) => {
     const updateData = {

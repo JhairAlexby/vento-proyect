@@ -40,16 +40,24 @@ const MenuPage = () => {
       if (editingProduct) {
         await productApi.update(editingProduct._id, data);
       } else {
-        await productApi.create(data);
+        // Crear nuevo producto
+        await productApi.create({
+          name: data.name.trim(),
+          description: data.description.trim(),
+          price: Number(data.price)
+        });
       }
   
-      await loadProducts();
+      await loadProducts(); // Recargar la lista
       setDialogOpen(false);
       setEditingProduct(undefined);
-    } catch (err) {
-      setError(editingProduct 
-        ? 'Error al actualizar el producto' 
-        : 'Error al crear el producto');
+    } catch (err: any) {
+      // Manejo más específico del error
+      const errorMessage = err.response?.data?.message || 
+        (editingProduct 
+          ? 'Error al actualizar el producto' 
+          : 'Error al crear el producto');
+      setError(errorMessage);
     } finally {
       setIsSaving(false);
     }

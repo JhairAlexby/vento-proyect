@@ -54,18 +54,24 @@ const ProductDialog = ({
   const validateForm = (): boolean => {
     const newErrors: Partial<Record<keyof MenuItemInput, string>> = {};
     
-    if (!formData.name.trim()) {
+    const trimmedName = formData.name.trim();
+    if (!trimmedName) {
       newErrors.name = 'El nombre es requerido';
+    } else if (trimmedName.length < 3) {
+      newErrors.name = 'El nombre debe tener al menos 3 caracteres';
     }
     
-    if (formData.price <= 0) {
+    if (!formData.price || formData.price <= 0) {
       newErrors.price = 'El precio debe ser mayor a 0';
     }
     
-    if (!formData.description.trim()) {
+    const trimmedDescription = formData.description.trim();
+    if (!trimmedDescription) {
       newErrors.description = 'La descripción es requerida';
+    } else if (trimmedDescription.length < 5) {
+      newErrors.description = 'La descripción debe tener al menos 10 caracteres';
     }
-
+  
     setValidationErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
